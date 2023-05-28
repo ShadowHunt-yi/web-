@@ -4,12 +4,6 @@
 * 性能优化: JS代码优化/css sprite/懒加载/鼠标划过节流/滚动节流
 * 工具: 前端业务逻辑工具包 outils
 
-## 项目预览地址
-
-[首页预览地址](https://lxs24sxl.github.io/mi/index.html)
-
-[mix2页面预览地址](https://lxs24sxl.github.io/mi/mix2.html)
-
 ## 模块化代码实现
 
 1. 进行数据封装(~~一点都不耗费时间~~)
