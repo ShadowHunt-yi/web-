@@ -1,0 +1,18 @@
+ {
+     "cases": [{
+             "name": "小米5x",
+             "price": 1588,
+             "imgSrc": "static/img/5x-2.jpg"
+         },
+         {
+             "name": "小米电视4",
+             "price": 2999,
+             "imgSrc": "static/img/dianshi465.png"
+         },
+         {
+             "name": "小米MIX2",
+             "price": 3888,
+             "imgSrc": "static/img/mix2320-220.png"
+         }
+     ]
+ }

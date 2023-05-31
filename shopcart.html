@@ -9,14 +9,13 @@
     <link rel="stylesheet" type="text/css" href="css/reset.css">
     <link rel="stylesheet" type="text/css" href="css/index.css">
     <link rel="stylesheet" type="text/css" href="css/shopcart.css">
-
+    <!--     <script src="js/getCases.js" type="module"></script> -->
 </head>
 
 <body>
     <div class="xs-topbar">
         <div class="container">
             <!-- 顶部 -->
-
             <div class="topbar-nav">
                 <a href="./index.html">小米商城</a>
                 <span class="sep">|</span>
@@ -43,7 +42,7 @@
             <div class="topbar-cart" id="topbarCart">
                 <a href="#" class="cart-mini" id="miniCartTrigger">
                     <i></i> 购物车
-                    <span class="cartNum">(0)</span>
+                    <span class="cartNum" id="caseSum">(0)</span>
                 </a>
                 <div class="cart-menu" id="miniCartMenu" style="display: none;">
                     <div class="loading">
@@ -62,7 +61,7 @@
         </div>
     </div>
     <div class="shopcart">
-        <div class="w">
+        <div class="w" id="casescon">
             <!-- 顶部 -->
             <div class="cart-table-th">
                 <!-- 全选 -->
@@ -96,8 +95,9 @@
                     操作
                 </div>
             </div>
+            <div id="cases"></div>
             <!-- 商品 -->
-            <ul class="item-content">
+            <!-- <ul class="item-content">
                 <li class="td-chk fl">
                     <div class="td-inner">
                         <input type="checkbox" class="choose">
@@ -184,7 +184,7 @@
                 <li class="td-caozuo fl">
                     <a href="#" class="a">删除</a>
                 </li>
-            </ul>
+            </ul> -->
             <!-- 全选 结账 -->
             <div class="float-bar-wrapper">
                 <!-- 全选 -->
@@ -196,7 +196,7 @@
                 </div>
                 <!-- 删除  -->
                 <div class="dele" id="1">
-                    <div class="dele-item  deletebtn" id="delete">删除</div>
+                    <div class="dele-item  delete" id="delete">删除</div>
                     <div class="dele-item">移入收藏夹</div>
                     <div class="dele-item">分享</div>
                 </div>
@@ -209,7 +209,34 @@
         </div>
 
     </div>
-    <script type="text/javascript" src="js/shopcart.js"></script>
+    <div>
+        <button>发送ajax</button>
+    </div>
+
 </body>
+<script>
+    function loadJS(url, success) {
+        var domScript = document.createElement('script');
+        domScript.src = url;
+        domScript.type = 'module'
+        success = success || function() {};
+        domScript.onload = domScript.onreadystatechange = function() {
+            if (!this.readyState || 'loaded' === this.readyState || 'complete' === this.readyState) {
+                success();
+                this.onload = this.onreadystatechange = null;
+                this.parentNode.removeChild(this);
+            }
+        }
+        document.getElementsByTagName('head')[0].appendChild(domScript);
+        // 先监听事件，然后在加脚本
+    }
+    console.log('no');
+    loadJS('js/getCases.js', function() {
+        loadJS('js/shopcart.js', function() {
+            console.log('ok');
+        })
+    })
+</script>
+<!-- <script type="module" src="js/shopcart.js"></script> -->
 
 </html>

@@ -76,7 +76,7 @@ function removeClass(ele, cls) {
     }
 }
 //兼容浏览器获取节点文本的方法
-function getText(e) {
+/* function getText(e) {
     var t = "";
 
     //如果传入的是元素，则继续遍历其子元素
@@ -93,39 +93,13 @@ function getText(e) {
     //返回区配的文本
     return t;
 }
-
-// 4.1.getExplore
-/**
- * @desc 获取浏览器类型和版本
- * @return {String}
  */
-function getExplore() {
-    var sys = {},
-        ua = navigator.userAgent.toLowerCase(),
-        s;
-    // 利用正则截取对应的版本号
-    (s = ua.match(/rv:([\d.]+)\) like gecko/)) ? sys.ie = s[1]:
-        (s = ua.match(/msie ([\d.]+)/)) ? sys.ie = s[1] :
-        (s = ua.match(/chrome\/([\d\.]+)/)) ? sys.chrome = s[1] :
-        (s = ua.match(/firefox\/([\d.]+)/)) ? sys.firefox = s[1] :
-        (s = ua.match(/(?:opera|opr).([\d.]+)/)) ? sys.opera = s[1] :
-        (s = ua.match(/edge\/([\d\.]+)/)) ? sys.edge = s[1] :
-        (s = ua.match(/version\/([\d\.]+).*safari/)) ? sys.safari = s[1] : 0;
-    // 根据关系进行判断
-    if (sys.ie) return ('IE: ' + sys.ie)
-    if (sys.edge) return ("Edge: " + sys.edge)
-    if (sys.chrome) return ('Chrome: ' + sys.chrome)
-    if (sys.firefox) return ('Firefox: ' + sys.firefox)
-    if (sys.opera) return ('Opera: ' + sys.opera)
-    if (sys.safari) return ('Safari: ' + sys.safari)
-    return 'Unkonwn';
-}
-console.log(getExplore());
+
 /**
  * @desc 深拷贝，支持常见类型
  * @param {Any} values
  */
-function deepClone(values) {
+/* function deepClone(values) {
     var copy;
 
     // Handle the 3 simple types, and null or undefined
@@ -157,7 +131,7 @@ function deepClone(values) {
     }
 
     throw new Error("Unable to copy values! Its type isn't supported.");
-}
+} */
 
 function getObjLength(obj) {
     var count = 0;
@@ -258,7 +232,7 @@ function jsonToArr(json) {
     }
     return obj;
 }
-
+var viewCommand
 
 /*加载页面的时候*/
 window.onload = function() {
@@ -512,7 +486,38 @@ window.onload = function() {
                 '</h3>',
                 '<p class="desc">{#desc#}</p>',
                 '</li>'
-            ].join("")
+            ].join(""),
+            //购物车模块
+            cases: [
+                '<ul class="item-content">',
+                '<li class="td-chk fl">',
+                '<div class="td-inner">',
+                '<input type="checkbox" class="choose">',
+                '</div>',
+                '</li>',
+                '<li class="td-item fl">',
+                '<div class="td-inner fl">',
+                '<img src={#imgSrc#} alt="">',
+                ' </div>',
+                '<div class="item-info">{#name#}',
+                '</div>',
+                '</li>',
+                '<li class="td-price fl">{#price#}</li>',
+                '<li class="td-amount fl">',
+                '<div class="td-inner">',
+                '<a href="#" class="btn td-sub fl">-</a>',
+                '<input type="text" value="1" class=" inpt fl">',
+                ' <a href="#" class="btn td-add fl">+</a>',
+                '</div>',
+                '</li>',
+                '<li class="td-sum fl">',
+                '<div class="td-inner">10.00 </div>',
+                '</li>',
+                '<li class="td-caozuo fl">',
+                '<a href="#" class="a">删除</a>',
+                '</li>',
+                '</ul>'
+            ]
 
         };
         // 格式化字符串缓存字符串
@@ -732,6 +737,17 @@ window.onload = function() {
                     // 初始化html
                     html = "";
                 }
+            },
+            innercases: function(data, view) {
+                if (data.length) {
+                    for (var i = 0, len = data.length; i < len; i++) {
+                        // 将格式化之后的字符串缓存到html中
+                        html += formateString(tpl[view], data[i]);
+                    }
+                } else {
+                    html += formateString(tpl[view], data[i]);
+                }
+                html = "";
             }
         };
         // 命令接口
@@ -744,16 +760,15 @@ window.onload = function() {
     })();
 
 
-
     /*购物车*/
-    var cartView = (function() {
-        /*鼠标进入事件函数*/
+    /* var cartView = (function() {
+        //鼠标进入事件函数
         function cartMoveEnter() {
             console.log("进入");
             mct.style.cssText = 'color: orange;background-color: white;';
             mcm.style.cssText = "display:block;padding:15px 0 0;overflow:hidden;height:84px;opacity:1;";
         }
-        /*鼠标离开事件函数*/
+        //鼠标离开事件函数
         function cartMoveLeave() {
             console.log("离开");
             mcm.style.cssText = "padding:0 0 0;height:0;";
@@ -763,25 +778,25 @@ window.onload = function() {
             }, 200);
         }
 
-        /*添加鼠标进入事件*/
+        //添加鼠标进入事件
         addHandler(tbc, "mouseenter", function(e) {
-            /*清除隐藏浮层方法计时器*/
+            //清除隐藏浮层方法计时器
             throttle(true, cartMoveLeave);
-            /*延迟显示浮层方法*/
+            //延迟显示浮层方法
             throttle(cartMoveEnter);
-            /*阻止默认行为*/
-            preventDefault(e);
+            //阻止默认行为
+            //preventDefault(e);
         });
-        /*添加鼠标离开事件*/
+        //添加鼠标离开事件
         addHandler(tbc, "mouseleave", function(e) {
-            /*延迟隐藏浮层方法*/
+            //延迟隐藏浮层方法
             throttle(cartMoveLeave);
-            /*清除显示浮层方法计时器*/
+            //清除显示浮层方法计时器
             throttle(true, cartMoveEnter);
-            /*阻止默认行为*/
-            preventDefault(e);
+            //阻止默认行为
+            //preventDefault(e);
         });
-    })();
+    })(); */
 
     /*菜单*/
     var navView = (function() {
@@ -803,7 +818,7 @@ window.onload = function() {
                 addHandler(oLi[x], "mouseenter", function(e) {
                     console.log(x + ":进入");
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e); 
                     /*清除隐藏浮层方法计时器*/
                     throttle(true, navMoveLeave);
                     /*延迟显示浮层方法*/
@@ -829,7 +844,7 @@ window.onload = function() {
                 addHandler(oLi[x], "mouseleave", function(e) {
                     console.log(x + ":离开");
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e); 
                     /*封装函数*/
                     /*延迟隐藏浮层方法*/
                     throttle(navMoveLeave);
@@ -839,13 +854,13 @@ window.onload = function() {
             })(i);
         }
         addHandler(navMenu, "mouseenter", function(e) {
-            preventDefault(e);
+            //preventDefault(e);
             /*清除隐藏浮层方法计时器*/
             throttle(true, navMoveLeave);
             throttle(navMoveEnter);
         });
         addHandler(navMenu, "mouseleave", function(e) {
-            preventDefault(e);
+            //preventDefault(e);
             /*延迟隐藏浮层方法*/
             throttle(navMoveLeave);
             /*清除显示浮层方法计时器*/
@@ -885,13 +900,13 @@ window.onload = function() {
                     }
                     oHideDiv[x].style.display = "block";
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e);
 
                 });
                 addHandler(oCateLi[x], "mouseleave", function(e) {
                     oHideDiv[x].style.display = "none";
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e);
                 });
             })(i)
         }
@@ -976,7 +991,7 @@ window.onload = function() {
                             break;
                     }
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e);
                     console.log(index);
                     return;
                 });
@@ -987,7 +1002,7 @@ window.onload = function() {
             (function(x) {
                 addHandler(oPaperLink[x], "click", function(e) {
                     /*阻止默认行为*/
-                    preventDefault(e);
+                    //preventDefault(e);
                     console.log(x);
                     anim.changeTo(x);
                 });
@@ -1000,13 +1015,13 @@ window.onload = function() {
         addHandler(slider, "mouseenter", function(e) {
             clearInterval(timer);
             /*阻止默认行为*/
-            preventDefault(e);
+            //preventDefault(e);
         });
         // 鼠标离开轮播图区域的时候，添加定时器
         addHandler(slider, "mouseleave", function(e) {
             anim.startAutoPlay();
             /*阻止默认行为*/
-            preventDefault(e);
+            //preventDefault(e);
         });
     })();
 
@@ -1087,7 +1102,7 @@ window.onload = function() {
                     (function(x) {
                         addHandler(controlsBtn[x], "click", function(e) {
                             /*阻止默认行为*/
-                            preventDefault(e);
+                            //preventDefault(e);
                             switch (oSpan[x].innerHTML) {
                                 case "上一行":
                                     console.log("上一行");
@@ -1232,12 +1247,12 @@ window.onload = function() {
                     for (var j = 0, len = brickListLi.length; j < len; j++) {
                         (function(x) {
                             addHandler(brickListLi[x], "mouseenter", function(e) {
-                                preventDefault(e);
+                                //preventDefault(e);
                                 console.log("enter");
                                 addClass(this, "brick-item-active");
                             });
                             addHandler(brickListLi[x], "mouseleave", function(e) {
-                                preventDefault(e);
+                                //preventDefault(e);
                                 console.log("leave");
                                 removeClass(this, "brick-item-active");
                             });
@@ -1256,7 +1271,7 @@ window.onload = function() {
                     (function(x) {
                         var oHideBrick = [];
                         addHandler(tabListLi[x], "mouseenter", function(e) {
-                            preventDefault(e);
+                            //preventDefault(e);
 
 
                             /************************************/
@@ -1285,7 +1300,7 @@ window.onload = function() {
                         });
 
                         addHandler(tabListLi[x], "mouseleave", function(e) {
-                            preventDefault(e);
+                            //preventDefault(e);
                             oldItem = brickList[x];
                             oldTab = tabListLi[x];
                         });
@@ -1324,12 +1339,12 @@ window.onload = function() {
                     (function(x) {
                         // 鼠标进入激活item列表
                         addHandler(oLi, "mouseenter", function(e) {
-                            preventDefault(e);
+                            //preventDefault(e);
                             addClass(oLi, "brick-item-active");
                         });
                         // 鼠标进入取消激活item列表
                         addHandler(oLi, "mouseleave", function(e) {
-                            preventDefault(e);
+                            //preventDefault(e);
                             removeClass(oLi, "brick-item-active");
                         });
                     })(i);
